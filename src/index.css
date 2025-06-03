@@ -1,0 +1,20 @@
+:root {
+  --bs-danger-rgb: 230, 0, 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background-image: url(/background.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.list-group {
+  --bs-list-group-active-bg: #e60000;
+  --bs-list-group-active-border-color: rgb(from var(--bs-list-group-active-bg) calc(r - 60) g b);
+}
