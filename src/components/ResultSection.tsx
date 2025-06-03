@@ -9,7 +9,7 @@ export const ResultSection = ({
 }: ResultSectionProps) => {
     return (
         <div className='p-2 text-center'>
-            <strong><output className='result'>{workingDays || 0} Arbeitstage = {Math.min(8, officeDays || 0)} Tage Büroanwesenheit</output></strong>
+            <strong><output className='result'>{workingDays || 0} Arbeitstage = {officeDays || 0} Tage Büroanwesenheit</output></strong>
         </div>
     );
 };
