@@ -25,11 +25,11 @@ class InputSectionModel {
 const getWorkingDaysFromSection = (section: InputSectionModel): number => {
     switch (section.unit) {
         case 'days':
-            return section.value!;
+            return section.value || 0;
         case 'weeks':
-            return section.value! * 5;
+            return (section.value || 0) * 5;
         default:
-            return -1;
+            return 0;
     }
 };
 
