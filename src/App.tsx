@@ -83,7 +83,11 @@ const App = () => {
     const workingDays = calcWorkingDays(sections);
     const officeDays = workingDaysToOfficeDays(workingDays, weeklyWorkingHours);
 
-    const handleMonthSelected = useCallback((_index: number, workingDays: number) => {
+    const handleMonthSelected = useCallback((index: number, workingDays: number) => {
+        if (index === -1) {
+            return;
+        }
+
         const newSections = [...sections];
         newSections[0].value = workingDays;
         newSections[0].unit = 'days';
