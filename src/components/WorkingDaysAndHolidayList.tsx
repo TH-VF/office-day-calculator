@@ -16,7 +16,7 @@ export const WorkingDaysAndHolidayList = ({
     onMonthSelected,
 }: WorkingDaysAndHolidayListProps) => {
     const [holidays, setHolidays] = useState<Holiday[]>([]);
-    const [hasError, setHasError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const currentMonth = getCurrentMonth();
     const currentMonthName = getMonthName(currentMonth);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
@@ -29,12 +29,14 @@ export const WorkingDaysAndHolidayList = ({
                 holidays = await loadPublicHolidays(country, year);
                 // console.log('holidays', holidays);
             } catch (error) {
-                holidays = [];
                 console.error('failed to load holidays', error);
+                setErrorMessage(`${error}`);
+                return;
             }
 
             if (!holidays.length) {
-                setHasError(true);
+                setErrorMessage('No holidays received');
+
                 return;
             }
 
@@ -54,15 +56,19 @@ export const WorkingDaysAndHolidayList = ({
         holidays,
     ]);
 
-    if (hasError) {
+    if (errorMessage) {
         return (
-            <p>Feiertage konnten nicht geladen werden</p>
+            <div className='alert alert-danger' role='alert'>
+                Feiertage konnten nicht geladen werden:
+                <br/>
+                {errorMessage}
+            </div>
         );
     }
 
     if (!holidays.length) {
         return (
-            <p>Lade...</p>
+            <div>Lade...</div>
         );
     }
 
