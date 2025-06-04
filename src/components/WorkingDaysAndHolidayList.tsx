@@ -18,7 +18,6 @@ export const WorkingDaysAndHolidayList = ({
     const [holidays, setHolidays] = useState<Holiday[]>([]);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const currentMonth = getCurrentMonth();
-    const currentMonthName = getMonthName(currentMonth);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
     useEffect(() => {
@@ -117,7 +116,7 @@ export const WorkingDaysAndHolidayList = ({
             </div>
             <div className='col-12 col-lg-6'>
                 <div className={`${styles['blur-background']} p-3 rounded-4`}>
-                    <h2 className='fw-light' title={`${holidaysByMonth.length} Feiertage im ${currentMonthName}, ${holidays.length} Feiertage in ${year}`}>Feiertage</h2>
+                    <h2 className='fw-light' title={`${selectedMonth === -1 ? '' : `${holidaysByMonth.length} Feiertage im ${getMonthName(selectedMonth)}, `}${holidays.length} Feiertage in ${year}`}>Feiertage</h2>
                     {
                         holidaysByMonth.length
                             ? (
