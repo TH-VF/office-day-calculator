@@ -1,7 +1,7 @@
 import { useCallback, useState, type ChangeEvent, type InputEvent } from 'react';
 import { getCurrentYear, workingDaysToOfficeDays } from './utils/date';
 import type { Operator } from './types/misc';
-import { InputSection } from './components/InputSection';
+import { InputSection, type InputSectionProps } from './components/InputSection';
 import { ResultSection } from './components/ResultSection';
 import { WorkingDaysAndHolidayList } from './components/WorkingDaysAndHolidayList';
 import logo from './assets/New_VF_Icon_RGB_RED.svg'
@@ -40,7 +40,7 @@ const App = () => {
     const [country, setCountry] = useState(localStorage.getItem('odc-country') || 'NW');
     const [weeklyWorkingHours, setWeeklyWorkingHours] = useState(parseFloat(localStorage.getItem('odc-weekly-working-hours') || '0') || 40);
 
-    const handleSectionChange = useCallback((section: InputSectionModel, val: { value: number, unit: string, operator: '+' | '-' }) => {
+    const handleSectionChange = useCallback((section: InputSectionModel, val: Parameters<InputSectionProps['onChange']>[0]) => {
         const sectionIndex = sections.indexOf(section);
         const newSections = [...sections];
 
