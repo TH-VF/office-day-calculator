@@ -33,6 +33,23 @@ const getWorkingDaysFromSection = (section: InputSectionModel): number => {
     }
 };
 
+const calcWorkingDays = (sections: InputSectionModel[]) => {
+    let workingDays = 0;
+
+    sections.forEach((section, index) => {
+        const workingDaysFromSection = getWorkingDaysFromSection(section);
+
+        if (index !== 0 && section.operator === '-') {
+            workingDays -= workingDaysFromSection;
+        }
+        else {
+            workingDays += workingDaysFromSection;
+        }
+    });
+
+    return workingDays;
+};
+
 const App = () => {
     const currentYear = getCurrentYear();
     const [sections, setSections] = useState([new InputSectionModel()]);
@@ -63,24 +80,7 @@ const App = () => {
         setSections(newSections);
     }, [sections]);
 
-    const calcWorkingDays = () => {
-        let workingDays = 0;
-
-        sections.forEach((section, index) => {
-            const workingDaysFromSection = getWorkingDaysFromSection(section);
-
-            if (index !== 0 && section.operator === '-') {
-                workingDays -= workingDaysFromSection;
-            }
-            else {
-                workingDays += workingDaysFromSection;
-            }
-        });
-
-        return workingDays;
-    };
-
-    const workingDays = calcWorkingDays();
+    const workingDays = calcWorkingDays(sections);
     const officeDays = workingDaysToOfficeDays(workingDays, weeklyWorkingHours);
 
     const handleMonthSelected = useCallback((_index: number, workingDays: number) => {
