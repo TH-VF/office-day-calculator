@@ -24,6 +24,11 @@
     border-bottom: 0;
 }
 
+.input-section :global(.input-group .form-control),
+.input-section :global(.input-group .form-select) {
+    line-height: 2;
+}
+
 .btn-group-operator {
     position: absolute;
     left: 50%;

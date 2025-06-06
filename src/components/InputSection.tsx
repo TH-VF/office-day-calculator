@@ -1,7 +1,11 @@
 import { useEffect, useState, type ChangeEvent, type InputEvent } from 'react';
 import type { Operator } from '../types/misc';
 import styles from '../styles.module.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    faMinus,
+    faPlus,
+} from '@fortawesome/free-solid-svg-icons'
 export interface InputSectionProps {
     index: number;
     count: number;
@@ -87,7 +91,10 @@ export const InputSection = ({
                     />
                     <label
                         className={`${styles['btn-operator']} btn btn-secondary p-0 rounded-1 rounded-end-0`}
-                        htmlFor={`input-opterator-plus-${index}`}>+</label>
+                        htmlFor={`input-opterator-plus-${index}`}
+                    >
+                        <FontAwesomeIcon icon={faPlus} size='xs' />
+                    </label>
                     <input
                         id={`input-opterator-minus-${index}`}
                         type='radio'
@@ -99,7 +106,10 @@ export const InputSection = ({
                     />
                     <label
                         className={`${styles['btn-operator']} btn btn-secondary p-0 rounded-1 rounded-start-0`}
-                        htmlFor={`input-opterator-minus-${index}`}>-</label>
+                        htmlFor={`input-opterator-minus-${index}`}
+                    >
+                        <FontAwesomeIcon icon={faMinus} size='xs' />
+                    </label>
                 </div>
             )}
             <div className='input-group'>
@@ -120,8 +130,8 @@ export const InputSection = ({
                     <option value='weeks'>{value === 1 ? 'Woche' : 'Wochen'}</option>
                 </select>
                 <div className='btn-group-vertical rounded-end-2 overflow-hidden'>
-                    {count > 1 && <button className='btn btn-secondary px-2 py-0 rounded-0' onClick={onDeleteSection}>-</button>}
-                    {isLast && index < 5 && <button className='btn btn-secondary px-2 py-0 rounded-0' onClick={onAddSection}>+</button>}
+                    {count > 1 && <button className='btn btn-secondary px-2 py-0 rounded-0' onClick={onDeleteSection} title='Eingabebereich löschen'><FontAwesomeIcon className='d-block' icon={faMinus} size='xs' /></button>}
+                    {isLast && index < 5 && <button className='btn btn-secondary px-2 py-0 rounded-0' onClick={onAddSection} title='Weiteren Eingabebereich hinzufügen'><FontAwesomeIcon className='d-block' icon={faPlus} size='xs' /></button>}
                 </div>
             </div>
         </div>
