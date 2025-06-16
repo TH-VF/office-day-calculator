@@ -24,7 +24,7 @@ class InputSectionModel {
     }
 }
 
-const getWorkingDaysFromSection = (section: InputSectionModel): number => {
+const getDaysFromSection = (section: InputSectionModel): number => {
     switch (section.unit) {
         case 'days':
             return section.value || 0;
@@ -39,18 +39,22 @@ const calcWorkingDays = (sections: InputSectionModel[]) => {
     let workingDays = 0;
 
     sections.forEach((section, index) => {
-        const workingDaysFromSection = getWorkingDaysFromSection(section);
+        const daysFromSection = getDaysFromSection(section);
 
         if (index !== 0 && section.operator === '-') {
-            // Business-Trips are not deducted from the working-days.
+            // Business-Trips are not deducted from the working days.
             // Instead, they are directly deducted from the resulting office days.
 
             if (section.type !== 'business-trip') {
-                workingDays -= workingDaysFromSection;
+                workingDays -= daysFromSection;
             }
         }
         else {
-            workingDays += workingDaysFromSection;
+            // Sick leaves and holidays are not added to the working days
+
+            if (section.type !== 'holiday' && section.type !== 'sick') {   
+                workingDays += daysFromSection;
+            }
         }
     });
 
@@ -62,8 +66,8 @@ const calcBusinessTripDays = (sections: InputSectionModel[]) => {
 
     sections.forEach(section => {
         if (section.type === 'business-trip') {
-            const workingDaysFromSection = getWorkingDaysFromSection(section);
-            businessTripDays += workingDaysFromSection;
+            const daysFromSection = getDaysFromSection(section);
+            businessTripDays += daysFromSection;
         }
     });
 
