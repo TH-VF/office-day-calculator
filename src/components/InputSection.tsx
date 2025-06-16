@@ -1,11 +1,12 @@
 import { useEffect, useState, type ChangeEvent, type InputEvent } from 'react';
 import type { Operator } from '../types/misc';
 import styles from '../styles.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faMinus,
     faPlus,
-} from '@fortawesome/free-solid-svg-icons'
+} from '@fortawesome/free-solid-svg-icons';
+
 export interface InputSectionProps {
     index: number;
     count: number;

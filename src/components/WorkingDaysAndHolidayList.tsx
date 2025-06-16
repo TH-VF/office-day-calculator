@@ -58,8 +58,9 @@ export const WorkingDaysAndHolidayList = ({
     if (errorMessage) {
         return (
             <div className='alert alert-danger' role='alert'>
-                Feiertage konnten nicht geladen werden:
-                <br/>
+                <strong className='d-block'>
+                    Feiertage konnten nicht geladen werden
+                </strong>
                 {errorMessage}
             </div>
         );
