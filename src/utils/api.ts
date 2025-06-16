@@ -1,5 +1,5 @@
 import type { Holiday } from '../types/misc';
-import { getRoseMondayDate, getVodafoneSpecificHolidays, isBridgeDayPossible } from './holidays';
+import { getVodafoneSpecificHolidays, isBridgeDayPossible } from './holidays';
 
 export const loadPublicHolidays = async (country: string, year: number): Promise<Holiday[]> => {
     const response = await fetch(`https://feiertage-api.de/api/?jahr=${year}&nur_land=${country}`);
@@ -7,15 +7,15 @@ export const loadPublicHolidays = async (country: string, year: number): Promise
     const holidayNames = Object.keys(responseJson);
     const holidays = [];
 
-    let easterSundayDate;
+    // let easterSundayDate;
 
     for (const holidayName of holidayNames) {
         const date = new Date(responseJson[holidayName].datum);
 
-        if (holidayName === 'Ostermontag') {
-            easterSundayDate = new Date(date);
-            easterSundayDate.setDate(easterSundayDate.getDate() - 1);
-        }
+        // if (holidayName === 'Ostermontag') {
+        //     easterSundayDate = new Date(date);
+        //     easterSundayDate.setDate(easterSundayDate.getDate() - 1);
+        // }
 
         holidays.push({
             name: holidayName,
@@ -30,17 +30,17 @@ export const loadPublicHolidays = async (country: string, year: number): Promise
 
     holidays.push(...vfSpecificHolidays);
 
-    if (easterSundayDate) {
-        const roseMondayDate = getRoseMondayDate(easterSundayDate);
+    // if (easterSundayDate) {
+    //     const roseMondayDate = getRoseMondayDate(easterSundayDate);
 
-        holidays.push({
-            name: 'Rosenmontag',
-            date: roseMondayDate,
-            vfSpecific: true,
-            bridgeDay: false,
-            halfDay: true,
-        });
-    }
+    //     holidays.push({
+    //         name: 'Rosenmontag',
+    //         date: roseMondayDate,
+    //         vfSpecific: true,
+    //         bridgeDay: false,
+    //         halfDay: true,
+    //     });
+    // }
 
     const holidayDates = holidays.map(holiday => holiday.date);
 
