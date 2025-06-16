@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type InputEvent } from 'react';
-import type { Operator } from '../types/misc';
+import type { InputType, InputUnit, Operator } from '../types/misc';
 import styles from '../styles.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -13,10 +13,12 @@ export interface InputSectionProps {
     isFirst: boolean;
     isLast: boolean;
     initialValue: number | null;
-    initialUnit: string | null;
+    initialUnit: InputUnit | null;
+    initialType: InputType | null;
     onChange: (args: {
         value: number;
-        unit: string;
+        unit: InputUnit;
+        type: InputType;
         operator: Operator;
     }) => void;
     onAddSection: () => void;
@@ -30,12 +32,14 @@ export const InputSection = ({
     isLast,
     initialValue,
     initialUnit,
+    initialType,
     onChange,
     onAddSection,
     onDeleteSection,
 }: InputSectionProps) => {
     const [value, setValue] = useState(isFirst ? (initialValue || 20) : 1);
-    const [unit, setUnit] = useState(isFirst ? (initialUnit || 'days') : 'weeks');
+    const [unit, setUnit] = useState<InputUnit>(isFirst ? (initialUnit || 'days') : 'weeks');
+    const [type, setType] = useState<InputType>(initialType || 'working-day');
     const [operator, setOperator] = useState<Operator>(isFirst ? '+' : '-');
 
     const handleOperatorChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,19 +51,25 @@ export const InputSection = ({
     };
 
     const handleUnitChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        setUnit(e.currentTarget.value);
+        setUnit(e.currentTarget.value as InputUnit);
+    };
+
+    const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        setType(e.currentTarget.value as InputType);
     };
 
     useEffect(() => {
         onChange({
             value,
             unit,
+            type,
             operator,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         value,
         unit,
+        type,
         operator,
     ]);
 
@@ -71,9 +81,14 @@ export const InputSection = ({
         if (initialUnit) {
             setUnit(initialUnit);
         }
+
+        if (initialType) {
+            setType(initialType);
+        }
     }, [
         initialValue,
         initialUnit,
+        initialType,
     ]);
 
 
@@ -123,12 +138,21 @@ export const InputSection = ({
                 />
                 <select
                     className='form-select'
-                    aria-label='Default select example'
                     value={unit}
                     onChange={handleUnitChange}
                 >
-                    <option value='days'>{value === 1 ? 'Tag' : 'Tage'}</option>
-                    <option value='weeks'>{value === 1 ? 'Woche' : 'Wochen'}</option>
+                    <option value='days'>{`Tag${value === 1 ? '' : 'e'}`}</option>
+                    <option value='weeks'>{`Woche${value === 1 ? '' : 'n'}`}</option>
+                </select>
+                <select
+                    className='form-select'
+                    value={type}
+                    onChange={handleTypeChange}
+                >
+                    <option value='working-day'>Arbeit</option>
+                    <option value='business-trip'>Geschäftsreise</option>
+                    <option value='holiday'>Urlaub</option>
+                    <option value='sick'>Krank</option>
                 </select>
                 <div className='btn-group-vertical rounded-end-2 overflow-hidden'>
                     {count > 1 && <button className='btn btn-secondary px-2 py-0 rounded-0' onClick={onDeleteSection} title='Eingabebereich löschen'><FontAwesomeIcon className='d-block' icon={faMinus} size='xs' /></button>}

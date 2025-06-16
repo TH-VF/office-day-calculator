@@ -33,10 +33,17 @@ export const setDayOfTheWeek = (date: Date, day: number) => {
     return date;
 };
 
-export const workingDaysToOfficeDays = (workingDays: number, weeklyWorkingHours: number) => {
+export const workingDaysToOfficeDays = (
+    workingDays: number,
+    businessTripDays: number,
+    weeklyWorkingHours: number,
+) => {
     // according to HR all contracts >= 35 hours are treated as 40 hours in terms of office days
     const actualWeeklyWorkingHours = weeklyWorkingHours >= 35 ? 40 : (weeklyWorkingHours || 0);
-    return Math.round((2 / 40 * actualWeeklyWorkingHours) / 5 * workingDays);
+    const officeDays = Math.round((2 / 40 * actualWeeklyWorkingHours) / 5 * workingDays);
+    const resultDays = officeDays - businessTripDays;
+
+    return resultDays;
 };
 
 export const getWorkingDaysInMonth = (year: number, month: number, holidayDates: Date[]) => {

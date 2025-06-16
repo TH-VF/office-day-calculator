@@ -1,6 +1,6 @@
 import { useCallback, useState, type ChangeEvent, type InputEvent } from 'react';
 import { getCurrentYear, workingDaysToOfficeDays } from './utils/date';
-import type { Operator } from './types/misc';
+import type { InputType, InputUnit, Operator } from './types/misc';
 import { InputSection, type InputSectionProps } from './components/InputSection';
 import { ResultSection } from './components/ResultSection';
 import { WorkingDaysAndHolidayList } from './components/WorkingDaysAndHolidayList';
@@ -11,13 +11,15 @@ import styles from './styles.module.css';
 class InputSectionModel {
     id: string;
     value: number | null;
-    unit: string | null;
+    unit: InputUnit | null;
+    type: InputType | null;
     operator: Operator | null;
 
     constructor() {
         this.id = `section-${Math.floor(Math.random() * 1e10)}`;
         this.value = null;
         this.unit = null;
+        this.type = null;
         this.operator = null;
     }
 }
@@ -40,7 +42,12 @@ const calcWorkingDays = (sections: InputSectionModel[]) => {
         const workingDaysFromSection = getWorkingDaysFromSection(section);
 
         if (index !== 0 && section.operator === '-') {
-            workingDays -= workingDaysFromSection;
+            // Business-Trips are not deducted from the working-days.
+            // Instead, they are directly deducted from the resulting office days.
+
+            if (section.type !== 'business-trip') {
+                workingDays -= workingDaysFromSection;
+            }
         }
         else {
             workingDays += workingDaysFromSection;
@@ -48,6 +55,19 @@ const calcWorkingDays = (sections: InputSectionModel[]) => {
     });
 
     return workingDays;
+};
+
+const calcBusinessTripDays = (sections: InputSectionModel[]) => {
+    let businessTripDays = 0;
+
+    sections.forEach(section => {
+        if (section.type === 'business-trip') {
+            const workingDaysFromSection = getWorkingDaysFromSection(section);
+            businessTripDays += workingDaysFromSection;
+        }
+    });
+
+    return businessTripDays;
 };
 
 const App = () => {
@@ -63,6 +83,7 @@ const App = () => {
 
         newSections[sectionIndex].value = val.value;
         newSections[sectionIndex].unit = val.unit;
+        newSections[sectionIndex].type = val.type;
         newSections[sectionIndex].operator = val.operator;
 
         setSections(newSections);
@@ -81,7 +102,8 @@ const App = () => {
     }, [sections]);
 
     const workingDays = calcWorkingDays(sections);
-    const officeDays = workingDaysToOfficeDays(workingDays, weeklyWorkingHours);
+    const businessTripDays = calcBusinessTripDays(sections);
+    const officeDays = workingDaysToOfficeDays(workingDays, businessTripDays, weeklyWorkingHours);
 
     const handleMonthSelected = useCallback((index: number, workingDays: number) => {
         if (index === -1) {
@@ -89,8 +111,11 @@ const App = () => {
         }
 
         const newSections = [...sections];
+
         newSections[0].value = workingDays;
         newSections[0].unit = 'days';
+        newSections[0].type = 'working-day';
+
         setSections(newSections);
     }, [sections]);
 
@@ -177,6 +202,7 @@ const App = () => {
                                         isLast={index === sections.length - 1}
                                         initialValue={section.value}
                                         initialUnit={section.unit}
+                                        initialType={section.type}
                                         onChange={val => handleSectionChange(section, val)}
                                         onAddSection={addSection}
                                         onDeleteSection={() => deleteSection(index)}
