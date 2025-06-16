@@ -8,7 +8,7 @@ export const ResultSection = ({
     officeDays
 }: ResultSectionProps) => {
     return (
-        <div className='p-2 text-center'>
+        <div className='pt-3 text-center'>
             <strong><output className='result'>{workingDays || 0} Arbeitstage = {officeDays || 0} Bürotage</output></strong>
         </div>
     );
