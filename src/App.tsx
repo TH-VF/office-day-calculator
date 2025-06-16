@@ -127,7 +127,7 @@ const App = () => {
                         <div className='col-12 col-lg-6'>
                             <section className={`${styles['blur-background']} p-3 px-lg-4 py-lg-4 px-xl-5 rounded-4`}>
                                 <div className='d-flex'>
-                                    <h1 className='d-flex fw-light align-items-center'>
+                                    <h1 className='d-flex fw-normal align-items-center'>
                                         <img
                                             className={`${styles['logo']} me-2`}
                                             src={logo}

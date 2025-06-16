@@ -108,7 +108,7 @@ export const WorkingDaysAndHolidayList = ({
         <div className='row gy-4'>
             <div className='col-12 col-lg-6'>
                 <div className={`${styles['blur-background']} p-3 rounded-4`}>
-                    <h2 className='fw-light' title={`${workingDaysTotal} Arbeitstage in ${year}`}>Arbeitstage {year}</h2>
+                    <h2 className='fw-normal' title={`${workingDaysTotal} Arbeitstage in ${year}`}>Arbeitstage {year}</h2>
                     <div className='list-group list-group-flush'>
                         {monthes}
                     </div>
@@ -116,7 +116,7 @@ export const WorkingDaysAndHolidayList = ({
             </div>
             <div className='col-12 col-lg-6'>
                 <div className={`${styles['blur-background']} p-3 rounded-4`}>
-                    <h2 className='fw-light' title={`${selectedMonth === -1 ? '' : `${holidaysByMonth.length} Feiertage im ${getMonthName(selectedMonth)}, `}${holidays.length} Feiertage in ${year}`}>Feiertage</h2>
+                    <h2 className='fw-normal' title={`${selectedMonth === -1 ? '' : `${holidaysByMonth.length} Feiertage im ${getMonthName(selectedMonth)}, `}${holidays.length} Feiertage in ${year}`}>Feiertage</h2>
                     {
                         holidaysByMonth.length
                             ? (
