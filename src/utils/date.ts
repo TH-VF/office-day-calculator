@@ -33,7 +33,7 @@ export const setDayOfTheWeek = (date: Date, day: number) => {
     return date;
 };
 
-export const workingDaysToOfficeDays = (
+export const calcOfficeDays = (
     workingDays: number,
     businessTripDays: number,
     weeklyWorkingHours: number,

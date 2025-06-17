@@ -1,5 +1,5 @@
 import { useCallback, useState, type ChangeEvent, type InputEvent } from 'react';
-import { getCurrentYear, workingDaysToOfficeDays } from './utils/date';
+import { getCurrentYear, calcOfficeDays } from './utils/date';
 import type { InputType, InputUnit, Operator } from './types/misc';
 import { InputSection, type InputSectionProps } from './components/InputSection';
 import { ResultSection } from './components/ResultSection';
@@ -107,7 +107,7 @@ const App = () => {
 
     const workingDays = calcWorkingDays(sections);
     const businessTripDays = calcBusinessTripDays(sections);
-    const officeDays = workingDaysToOfficeDays(workingDays, businessTripDays, weeklyWorkingHours);
+    const officeDays = calcOfficeDays(workingDays, businessTripDays, weeklyWorkingHours);
 
     const handleMonthSelected = useCallback((index: number, workingDays: number) => {
         if (index === -1) {
