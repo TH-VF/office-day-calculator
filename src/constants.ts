@@ -1,3 +1,9 @@
+export const localStoragePrefix = 'odc-';
+export const localStorageKeySections = `${localStoragePrefix}sections`;
+export const localStorageKeyYear = `${localStoragePrefix}year`;
+export const localStorageKeyCountry = `${localStoragePrefix}country`;
+export const localStorageKeyWeeklyWorkingHours = `${localStoragePrefix}weekly-working-hours`;
+
 export const countries = [
     {
         value: 'BW',

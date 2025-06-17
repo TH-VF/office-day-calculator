@@ -5,7 +5,7 @@ import { InputSection, type InputSectionProps } from './components/InputSection'
 import { ResultSection } from './components/ResultSection';
 import { WorkingDaysAndHolidayList } from './components/WorkingDaysAndHolidayList';
 import logo from './assets/New_VF_Icon_RGB_RED.svg'
-import { countries } from './constants';
+import { countries, localStorageKeyCountry, localStorageKeySections, localStorageKeyWeeklyWorkingHours, localStorageKeyYear } from './constants';
 import styles from './styles.module.css';
 
 class InputSectionModel {
@@ -74,12 +74,37 @@ const calcBusinessTripDays = (sections: InputSectionModel[]) => {
     return businessTripDays;
 };
 
+const getInitialSections = (): InputSectionModel[] => {
+    const createDefaultSections = () => [new InputSectionModel()];
+
+    return createDefaultSections();
+    // const sectionData = localStorage.getItem(localStorageKeySections);
+
+    // if (!sectionData) {
+    //     return createDefaultSections();
+    // }
+
+    // let sections: InputSectionModel[];
+    
+    // try {
+    //     sections = JSON.parse(sectionData) as InputSectionModel[];
+    // }
+    // catch {
+    //     return createDefaultSections();
+    // }
+
+    // return sections;
+};
+
+const getInitialYear = () => parseInt(localStorage.getItem(localStorageKeyYear) || '', 10) || getCurrentYear();
+const getInitialCountry = () => localStorage.getItem(localStorageKeyCountry) || 'NW';
+const getInitialWeeklyWorkingHours = () => parseFloat(localStorage.getItem(localStorageKeyWeeklyWorkingHours) || '0') || 40;
+
 const App = () => {
-    const currentYear = getCurrentYear();
-    const [sections, setSections] = useState([new InputSectionModel()]);
-    const [year, setYear] = useState(parseInt(localStorage.getItem('odc-year') || '', 10) || currentYear);
-    const [country, setCountry] = useState(localStorage.getItem('odc-country') || 'NW');
-    const [weeklyWorkingHours, setWeeklyWorkingHours] = useState(parseFloat(localStorage.getItem('odc-weekly-working-hours') || '0') || 40);
+    const [sections, setSections] = useState(getInitialSections);
+    const [year, setYear] = useState(getInitialYear);
+    const [country, setCountry] = useState(getInitialCountry);
+    const [weeklyWorkingHours, setWeeklyWorkingHours] = useState(getInitialWeeklyWorkingHours);
 
     const handleSectionChange = useCallback((section: InputSectionModel, val: Parameters<InputSectionProps['onChange']>[0]) => {
         const sectionIndex = sections.indexOf(section);
@@ -91,6 +116,7 @@ const App = () => {
         newSections[sectionIndex].operator = val.operator;
 
         setSections(newSections);
+        localStorage.setItem(localStorageKeySections, JSON.stringify(newSections));
     }, [sections]);
 
     const addSection = useCallback(() => {
@@ -126,21 +152,23 @@ const App = () => {
     const handleYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const year = e.currentTarget!.value;
         const yearAsNumber = parseInt(e.currentTarget!.value, 10);
-        localStorage.setItem('odc-year', year.toString());
+        localStorage.setItem(localStorageKeyYear, year.toString());
         setYear(yearAsNumber);
     };
 
     const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const country = e.currentTarget!.value;
-        localStorage.setItem('odc-country', country);
+        localStorage.setItem(localStorageKeyCountry, country);
         setCountry(country);
     };
 
     const handleWeeklyWorkingHoursChange = (e: InputEvent<HTMLInputElement>) => {
         const weeklyWorkingHours = e.currentTarget.valueAsNumber;
-        localStorage.setItem('odc-weekly-working-hours', weeklyWorkingHours.toString());
+        localStorage.setItem(localStorageKeyWeeklyWorkingHours, weeklyWorkingHours.toString());
         setWeeklyWorkingHours(weeklyWorkingHours);
     };
+
+    const currentYear = getCurrentYear();
 
     const years = [
         currentYear - 1,
