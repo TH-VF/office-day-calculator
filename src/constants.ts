@@ -1,3 +1,5 @@
+export const locale = 'de-DE';
+
 export const localStoragePrefix = 'odc-';
 export const localStorageKeySections = `${localStoragePrefix}sections`;
 export const localStorageKeyYear = `${localStoragePrefix}year`;

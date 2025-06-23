@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { formatDate, getCurrentMonth, getMonthName, getMonthNames, getWorkingDaysInMonth } from '../utils/date';
+import { formatDate, getCurrentMonth, getMonthName, getMonthNames, getWeekdayShort, getWorkingDaysInMonth } from '../utils/date';
 import { loadPublicHolidays } from '../utils/api';
 import type { Holiday } from '../types/misc';
 import styles from '../styles.module.css';
@@ -124,9 +124,8 @@ export const WorkingDaysAndHolidayList = ({
                                 <ul className='list-group list-group-flush'>
                                     {holidaysByMonth.map(holiday => (
                                         <li key={holiday.name} className='list-group-item'>
-                                            <span className='me-1'>{formatDate(holiday.date)}
-                                                &nbsp;–&nbsp;
-                                                {holiday.name}
+                                            <span className='me-1'>
+                                                {formatDate(holiday.date)}&nbsp;({getWeekdayShort(holiday.date)})&nbsp;–&nbsp;{holiday.name}
                                             </span>
                                             {holiday.vfSpecific && <span className='badge text-bg-danger rounded-pill me-1'>Vodafone</span>}
                                             {holiday.halfDay && <span className='badge text-bg-warning rounded-pill me-1'>Halber Tag</span>}

@@ -1,3 +1,5 @@
+import { locale } from '../constants';
+
 export const getCurrentYear = () => new Date().getFullYear();
 export const getCurrentMonth = () => new Date().getMonth();
 
@@ -10,12 +12,12 @@ export const getMonthName = (month: number) => {
     date.setDate(15);
     date.setMonth(month);
 
-    return date.toLocaleString('de-DE', { month: 'long' });
+    return date.toLocaleString(locale, { month: 'long' });
 };
 
 export const getMonthNames = () => Array.from({ length: 12 }, (_el, index) => getMonthName(index));
 
-export const formatDate = (date: Date) => date.toLocaleDateString('de-DE', {
+export const formatDate = (date: Date) => date.toLocaleDateString(locale, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -72,3 +74,5 @@ export const getWorkingDaysInMonth = (year: number, month: number, holidayDates:
 
     return workingDays;
 };
+
+export const getWeekdayShort = (date: Date) => date.toLocaleDateString(locale, { weekday: 'short' });
