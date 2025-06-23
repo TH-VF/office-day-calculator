@@ -149,10 +149,14 @@ export const InputSection = ({
                     value={type}
                     onChange={handleTypeChange}
                 >
-                    <option value='working-day'>Arbeit</option>
-                    <option value='business-trip'>Geschäftsreise</option>
-                    <option value='holiday'>Urlaub</option>
-                    <option value='sick'>Krank</option>
+                    <optgroup label="Anwesenheit">
+                        <option value='working-day'>Arbeit</option>
+                        <option value='business-trip'>Geschäftsreise</option>
+                    </optgroup>
+                    <optgroup label="Abwesenheit">
+                        <option value='holiday'>Urlaub</option>
+                        <option value='sick'>Krank</option>
+                    </optgroup>
                 </select>
                 <div className='btn-group-vertical rounded-end-2 overflow-hidden'>
                     {count > 1 && <button className='btn btn-secondary px-2 py-0 rounded-0' onClick={onDeleteSection} title='Eingabebereich löschen'><FontAwesomeIcon className='d-block' icon={faMinus} size='xs' /></button>}
