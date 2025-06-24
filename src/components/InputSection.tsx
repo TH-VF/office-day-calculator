@@ -43,35 +43,48 @@ export const InputSection = ({
     const [operator, setOperator] = useState<Operator>(isFirst ? '+' : '-');
 
     const handleOperatorChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setOperator(e.currentTarget.value as Operator);
-    };
-
-    const handleValueChange = (e: InputEvent<HTMLInputElement>) => {
-        setValue(e.currentTarget.valueAsNumber);
-    };
-
-    const handleUnitChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        setUnit(e.currentTarget.value as InputUnit);
-    };
-
-    const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        setType(e.currentTarget.value as InputType);
-    };
-
-    useEffect(() => {
+        const newOperator = e.currentTarget.value as Operator;
+        setOperator(newOperator);
         onChange({
             value,
             unit,
             type,
+            operator: newOperator,
+        });
+    };
+
+    const handleValueChange = (e: InputEvent<HTMLInputElement>) => {
+        const newValue = e.currentTarget.valueAsNumber;
+        setValue(newValue);
+        onChange({
+            value: newValue,
+            unit,
+            type,
             operator,
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        value,
-        unit,
-        type,
-        operator,
-    ]);
+    };
+
+    const handleUnitChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        const newUnit = e.currentTarget.value as InputUnit;
+        setUnit(newUnit);
+        onChange({
+            value,
+            unit: newUnit,
+            type,
+            operator,
+        });
+    };
+
+    const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        const newType = e.currentTarget.value as InputType;
+        setType(newType);
+        onChange({
+            value,
+            unit,
+            type: newType,
+            operator,
+        });
+    };
 
     useEffect(() => {
         if (initialValue) {

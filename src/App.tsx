@@ -110,10 +110,13 @@ const App = () => {
         const sectionIndex = sections.indexOf(section);
         const newSections = [...sections];
 
-        newSections[sectionIndex].value = val.value;
-        newSections[sectionIndex].unit = val.unit;
-        newSections[sectionIndex].type = val.type;
-        newSections[sectionIndex].operator = val.operator;
+        newSections[sectionIndex] = {
+            ...newSections[sectionIndex],
+            value: val.value,
+            unit: val.unit,
+            type: val.type,
+            operator: val.operator,
+        };
 
         setSections(newSections);
         localStorage.setItem(localStorageKeySections, JSON.stringify(newSections));
