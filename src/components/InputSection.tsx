@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type InputEvent } from 'react';
+import { useState, type ChangeEvent, type InputEvent } from 'react';
 import type { InputType, InputUnit, Operator } from '../types/misc';
 import styles from '../styles.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -41,6 +41,18 @@ export const InputSection = ({
     const [unit, setUnit] = useState<InputUnit>(isFirst ? (initialUnit || 'days') : 'weeks');
     const [type, setType] = useState<InputType>(initialType || 'working-day');
     const [operator, setOperator] = useState<Operator>(isFirst ? '+' : '-');
+
+    if (initialValue && initialValue !== value) {
+        setValue(initialValue);
+    }
+
+    if (initialUnit && initialUnit !== unit) {
+        setUnit(initialUnit);
+    }
+
+    if (initialType && initialType !== type) {
+        setType(initialType);
+    }
 
     const handleOperatorChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newOperator = e.currentTarget.value as Operator;
@@ -85,25 +97,6 @@ export const InputSection = ({
             operator,
         });
     };
-
-    useEffect(() => {
-        if (initialValue) {
-            setValue(initialValue);
-        }
-
-        if (initialUnit) {
-            setUnit(initialUnit);
-        }
-
-        if (initialType) {
-            setType(initialType);
-        }
-    }, [
-        initialValue,
-        initialUnit,
-        initialType,
-    ]);
-
 
     return (
         <div className={`${styles['input-section']} py-4`}>

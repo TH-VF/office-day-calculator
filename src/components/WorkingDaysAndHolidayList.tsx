@@ -20,12 +20,25 @@ export const WorkingDaysAndHolidayList = ({
     const currentMonth = getCurrentMonth();
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
+    const handleMonthSelected = (holidays: Holiday[], selectedMonth: number) => {
+        const holidayDates = holidays.map(holiday => holiday.date);
+        const workingDaysInMonth = getWorkingDaysInMonth(year, selectedMonth, holidayDates);
+        onMonthSelected(selectedMonth, workingDaysInMonth);
+    };
+
     useEffect(() => {
+        let ignore = false;
+
         const loadHolidays = async () => {
             let holidays: Holiday[];
 
             try {
                 holidays = await loadPublicHolidays(country, year);
+
+                if (ignore) {
+                    return;
+                }
+
                 // console.log('holidays', holidays);
             } catch (error) {
                 console.error('failed to load holidays', error);
@@ -40,19 +53,18 @@ export const WorkingDaysAndHolidayList = ({
             }
 
             setHolidays(holidays);
+            handleMonthSelected(holidays, selectedMonth);
         };
 
         loadHolidays();
-    }, [country, year]);
 
-    useEffect(() => {
-        const holidayDates = holidays.map(holiday => holiday.date);
-        const workingDaysInMonth = getWorkingDaysInMonth(year, selectedMonth, holidayDates);
-        onMonthSelected(selectedMonth, workingDaysInMonth);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        return () => {
+            ignore = true;
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        selectedMonth,
-        holidays,
+        country,
+        year,
     ]);
 
     if (errorMessage) {
@@ -76,11 +88,11 @@ export const WorkingDaysAndHolidayList = ({
 
     const handleMonthClick = (index: number) => {
         const isAlreadySelected = index === selectedMonth;
-        setSelectedMonth(isAlreadySelected ? -1 : index);
-
+        const newSelectedMonth = isAlreadySelected ? -1 : index;
+        setSelectedMonth(newSelectedMonth);
+        
         if (!isAlreadySelected) {
-            const workingDaysInMonth = getWorkingDaysInMonth(year, index, holidayDates);
-            onMonthSelected(index, workingDaysInMonth);
+            handleMonthSelected(holidays, newSelectedMonth);
         }
     };
 
