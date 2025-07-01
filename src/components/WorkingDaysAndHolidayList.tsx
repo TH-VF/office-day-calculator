@@ -61,6 +61,8 @@ export const WorkingDaysAndHolidayList = ({
         return () => {
             ignore = true;
         };
+    // rule is disabled because we only want to fetch holidays when `country` or `year` changes
+    // but not when `handleMonthSelected` or `selectedMonth` changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         country,
