@@ -19,10 +19,10 @@ class InputSectionModel {
 
     constructor() {
         this.id = `section-${Math.floor(Math.random() * 1e10)}`;
-        this.value = null;
-        this.unit = null;
-        this.type = null;
-        this.operator = null;
+        this.value = 1;
+        this.unit = 'weeks';
+        this.type = 'working-day';
+        this.operator = '-';
     }
 }
 
