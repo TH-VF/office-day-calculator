@@ -12,10 +12,10 @@ import { faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 
 class InputSectionModel {
     id: string;
-    value: number | null;
-    unit: InputUnit | null;
-    type: InputType | null;
-    operator: Operator | null;
+    value: number;
+    unit: InputUnit;
+    type: InputType;
+    operator: Operator;
 
     constructor() {
         this.id = `section-${Math.floor(Math.random() * 1e10)}`;
@@ -266,20 +266,15 @@ const App = () => {
                                         count={sections.length}
                                         isFirst={index === 0}
                                         isLast={index === sections.length - 1}
-                                        initialValue={section.value}
-                                        initialUnit={section.unit}
-                                        initialType={section.type}
+                                        value={section.value}
+                                        unit={section.unit}
+                                        type={section.type}
                                         onChange={val => handleSectionChange(section, val)}
                                         onAddSection={addSection}
                                         onDeleteSection={() => deleteSection(index)}
                                     />)
                                 )}
                                 <ResultSection workingDays={workingDays} officeDays={officeDays} />
-                                <div className='mt-2 text-center fs-6'>
-                                    <small>
-                                        Berechnung ohne Gewähr
-                                    </small>
-                                </div>
                             </section>
                         </div>
                         <div className='col-12 col-lg-6'>

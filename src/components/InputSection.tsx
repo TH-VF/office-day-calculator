@@ -12,9 +12,9 @@ export interface InputSectionProps {
     count: number;
     isFirst: boolean;
     isLast: boolean;
-    initialValue: number | null;
-    initialUnit: InputUnit | null;
-    initialType: InputType | null;
+    value: number;
+    unit: InputUnit;
+    type: InputType;
     onChange: (args: {
         value: number;
         unit: InputUnit;
@@ -30,71 +30,71 @@ export const InputSection = ({
     count,
     isFirst,
     isLast,
-    initialValue,
-    initialUnit,
-    initialType,
+    value,
+    unit,
+    type,
     onChange,
     onAddSection,
     onDeleteSection,
 }: InputSectionProps) => {
-    const [value, setValue] = useState(isFirst ? (initialValue || 20) : 1);
-    const [unit, setUnit] = useState<InputUnit>(isFirst ? (initialUnit || 'days') : 'weeks');
-    const [type, setType] = useState<InputType>(initialType || 'working-day');
-    const [operator, setOperator] = useState<Operator>(isFirst ? '+' : '-');
+    const [currentValue, setCurrentValue] = useState(isFirst ? value : 1);
+    const [currentUnit, setCurrentUnit] = useState<InputUnit>(isFirst ? unit : 'weeks');
+    const [currentType, setCurrentType] = useState<InputType>(type);
+    const [currentOperator, setCurrentOperator] = useState<Operator>(isFirst ? '+' : '-');
 
-    if (initialValue && initialValue !== value) {
-        setValue(initialValue);
+    if (value && value !== currentValue) {
+        setCurrentValue(value);
     }
 
-    if (initialUnit && initialUnit !== unit) {
-        setUnit(initialUnit);
+    if (unit && unit !== currentUnit) {
+        setCurrentUnit(unit);
     }
 
-    if (initialType && initialType !== type) {
-        setType(initialType);
+    if (type && type !== currentType) {
+        setCurrentType(type);
     }
 
     const handleOperatorChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newOperator = e.currentTarget.value as Operator;
-        setOperator(newOperator);
+        setCurrentOperator(newOperator);
         onChange({
-            value,
-            unit,
-            type,
+            value: currentValue,
+            unit: currentUnit,
+            type: currentType,
             operator: newOperator,
         });
     };
 
     const handleValueChange = (e: InputEvent<HTMLInputElement>) => {
         const newValue = e.currentTarget.valueAsNumber;
-        setValue(newValue);
+        setCurrentValue(newValue);
         onChange({
             value: newValue,
-            unit,
-            type,
-            operator,
+            unit: currentUnit,
+            type: currentType,
+            operator: currentOperator,
         });
     };
 
     const handleUnitChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const newUnit = e.currentTarget.value as InputUnit;
-        setUnit(newUnit);
+        setCurrentUnit(newUnit);
         onChange({
-            value,
+            value: currentValue,
             unit: newUnit,
-            type,
-            operator,
+            type: currentType,
+            operator: currentOperator,
         });
     };
 
     const handleTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const newType = e.currentTarget.value as InputType;
-        setType(newType);
+        setCurrentType(newType);
         onChange({
-            value,
-            unit,
+            value: currentValue,
+            unit: currentUnit,
             type: newType,
-            operator,
+            operator: currentOperator,
         });
     };
 
@@ -108,7 +108,7 @@ export const InputSection = ({
                         name={`input-opterator-${index}`}
                         className='btn-check'
                         value='+'
-                        checked={operator === '+'}
+                        checked={currentOperator === '+'}
                         onChange={handleOperatorChange}
                     />
                     <label
@@ -123,7 +123,7 @@ export const InputSection = ({
                         name={`input-opterator-${index}`}
                         className='btn-check'
                         value='-'
-                        checked={operator === '-'}
+                        checked={currentOperator === '-'}
                         onChange={handleOperatorChange}
                     />
                     <label
@@ -139,20 +139,20 @@ export const InputSection = ({
                     className='form-control input'
                     type='number'
                     min='1'
-                    value={value || ''}
+                    value={currentValue || ''}
                     onInput={handleValueChange}
                 />
                 <select
                     className='form-select'
-                    value={unit}
+                    value={currentUnit}
                     onChange={handleUnitChange}
                 >
-                    <option value='days'>{`Tag${value === 1 ? '' : 'e'}`}</option>
-                    <option value='weeks'>{`Woche${value === 1 ? '' : 'n'}`}</option>
+                    <option value='days'>{`Tag${currentValue === 1 ? '' : 'e'}`}</option>
+                    <option value='weeks'>{`Woche${currentValue === 1 ? '' : 'n'}`}</option>
                 </select>
                 <select
                     className='form-select'
-                    value={type}
+                    value={currentType}
                     onChange={handleTypeChange}
                 >
                     <optgroup label="Anwesenheit">
