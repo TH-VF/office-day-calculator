@@ -42,7 +42,7 @@ export const calcOfficeDays = (
 ) => {
     // according to HR all contracts >= 35 hours are treated as 40 hours in terms of office days
     const actualWeeklyWorkingHours = weeklyWorkingHours >= 35 ? 40 : (weeklyWorkingHours || 0);
-    const officeDays = Math.round((2 / 40 * actualWeeklyWorkingHours) / 5 * workingDays);
+    const officeDays = (2 / 40 * actualWeeklyWorkingHours) / 5 * workingDays;
     const resultDays = officeDays - businessTripDays;
 
     return resultDays;
