@@ -15,7 +15,7 @@ export const ResultSection = (props: ResultSectionProps) => {
                 <output className='result'>
                     {workingDays} {`Arbeitstag${workingDays === 1 ? '' : 'e'}`}
                     &nbsp;=&nbsp;
-                    <span title={`${roundedOfficeDaysToTwoDecimalPlaces}`}>{roundedOfficeDays} {`Bürotag${roundedOfficeDays === 1 ? '' : 'e'}`}</span>*
+                    <span title={`${roundedOfficeDaysToTwoDecimalPlaces} Bürotag${roundedOfficeDays === 1 ? '' : 'e'}`}>{roundedOfficeDays} {`Bürotag${roundedOfficeDays === 1 ? '' : 'e'}`}</span>*
                 </output>
             </strong>
             <div className='mt-2 fs-6'>
