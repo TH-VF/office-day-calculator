@@ -275,6 +275,11 @@ const App = () => {
                                     />)
                                 )}
                                 <ResultSection workingDays={workingDays} officeDays={officeDays} />
+                                <div className='mt-2 text-center fs-6'>
+                                    <small>
+                                        Berechnung ohne Gewähr
+                                    </small>
+                                </div>
                             </section>
                         </div>
                         <div className='col-12 col-lg-6'>

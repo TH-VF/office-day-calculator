@@ -30,4 +30,3 @@ body {
     --bs-list-group-active-bg: #e60000;
     --bs-list-group-active-border-color: rgb(from var(--bs-list-group-active-bg) calc(r - 60) g b);
 }
-
