@@ -5,8 +5,10 @@ import { InputSection, type InputSectionProps } from './components/InputSection'
 import { ResultSection } from './components/ResultSection';
 import { WorkingDaysAndHolidayList } from './components/WorkingDaysAndHolidayList';
 import logo from './assets/New_VF_Icon_RGB_RED.svg'
-import { countries, localStorageKeyCountry, localStorageKeySections, localStorageKeyWeeklyWorkingHours, localStorageKeyYear } from './constants';
+import { countries, localStorageKeyCountry, localStorageKeySections, localStorageKeyWeeklyWorkingHours, localStorageKeyYear, localStoragePrefix } from './constants';
 import styles from './styles.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 
 class InputSectionModel {
     id: string;
@@ -77,23 +79,24 @@ const calcBusinessTripDays = (sections: InputSectionModel[]) => {
 const getInitialSections = (): InputSectionModel[] => {
     const createDefaultSections = () => [new InputSectionModel()];
 
-    return createDefaultSections();
-    // const sectionData = localStorage.getItem(localStorageKeySections);
+    // return createDefaultSections();
 
-    // if (!sectionData) {
-    //     return createDefaultSections();
-    // }
+    const sectionData = localStorage.getItem(localStorageKeySections);
 
-    // let sections: InputSectionModel[];
+    if (!sectionData) {
+        return createDefaultSections();
+    }
+
+    let sections: InputSectionModel[];
     
-    // try {
-    //     sections = JSON.parse(sectionData) as InputSectionModel[];
-    // }
-    // catch {
-    //     return createDefaultSections();
-    // }
+    try {
+        sections = JSON.parse(sectionData) as InputSectionModel[];
+    }
+    catch {
+        return createDefaultSections();
+    }
 
-    // return sections;
+    return sections;
 };
 
 const getInitialYear = () => parseInt(localStorage.getItem(localStorageKeyYear) || '', 10) || getCurrentYear();
@@ -105,6 +108,11 @@ const App = () => {
     const [year, setYear] = useState(getInitialYear);
     const [country, setCountry] = useState(getInitialCountry);
     const [weeklyWorkingHours, setWeeklyWorkingHours] = useState(getInitialWeeklyWorkingHours);
+
+    const setAndSaveSections = (newSections: InputSectionModel[]) => {
+        setSections(newSections);
+        localStorage.setItem(localStorageKeySections, JSON.stringify(newSections));
+    };
 
     const handleSectionChange = useCallback((section: InputSectionModel, val: Parameters<InputSectionProps['onChange']>[0]) => {
         const sectionIndex = sections.indexOf(section);
@@ -118,20 +126,19 @@ const App = () => {
             operator: val.operator,
         };
 
-        setSections(newSections);
-        localStorage.setItem(localStorageKeySections, JSON.stringify(newSections));
+        setAndSaveSections(newSections);
     }, [sections]);
 
     const addSection = useCallback(() => {
         const newSections = [...sections];
         newSections.push(new InputSectionModel());
-        setSections(newSections);
+        setAndSaveSections(newSections);
     }, [sections]);
 
     const deleteSection = useCallback((index: number) => {
         const newSections = [...sections];
         newSections.splice(index, 1);
-        setSections(newSections);
+        setAndSaveSections(newSections);
     }, [sections]);
 
     const workingDays = calcWorkingDays(sections);
@@ -140,6 +147,11 @@ const App = () => {
 
     const handleMonthSelected = useCallback((index: number, workingDays: number) => {
         if (index === -1) {
+            return;
+        }
+
+        if (sections.length > 1) {
+            // user has already made changes (added custom input sections, so we don't want to modify his work)
             return;
         }
 
@@ -179,6 +191,22 @@ const App = () => {
         currentYear + 1,
     ];
 
+    const handleResetButtonClick = () => {
+        const confirmed = window.confirm('Alle Eingaben zurücksetzen?');
+
+        if (!confirmed) {
+            return;
+        }
+
+        const localStorageKeys = Object.keys(localStorage).filter(key => key.startsWith(localStoragePrefix));
+
+        localStorageKeys.forEach(localStorageKey => {
+            localStorage.removeItem(localStorageKey);
+        });
+
+        location.reload();
+    };
+
     return (
         <>
             <div className='py-5'>
@@ -196,6 +224,9 @@ const App = () => {
                                         />
                                         Bürotage-Rechner
                                     </h1>
+                                    <button className='btn px-0 ms-auto border-0' title='Alle Eingaben zurücksetzen' onClick={handleResetButtonClick}>
+                                        <FontAwesomeIcon icon={faRotateLeft} size='sm' />
+                                    </button>
                                 </div>
                                 <div className={`${styles['config-section']} py-4 row`}>
                                     <div className='col'>
